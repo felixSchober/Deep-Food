@@ -1,0 +1,28 @@
+% !TeX root = ../main.tex
+
+\chapter{Conclusion}
+\label{ch:conclusion}
+In the course of this bachelor's thesis the foundation for future food recognition systems was built from ground up. The developed application is able to use different classifiers for food classification, segmentation and size estimation. 
+
+In addition, several classifiers were benchmarked to indicate models that are useful for the specific task of food recognition. Out of 7 models that were tested \gls{surf}-features in combinations with $\chi^2$ \glspl{svm} achieved the highest accuracy with 40.3\%. If the classifier is able to suggest 5 possible food items the accuracy increases to 75\%. It was shown that despite the simplicity of color histograms this classification method is important for food recognition because color is an integral part of food. 
+
+Convolutional neural nets were also tested but the accuracy was far below the accuracy of traditional feature classifiers and there are three reasons for that:
+
+\begin{enumerate}
+	\item \textbf{Network architecture}: The training of neural networks takes a very long time and is potentially very expensive. Very deep neural networks like the recent winner of the of \gls{ilsvrc} are not possible to train without very powerful hardware. The experiments on neural networks that were conducted for this thesis used a Nvidia Grid K520 \gls{gpu} with 3072 \gls{cuda} cores which is the highest amount of \gls{cuda} cores in a graphics card. Even with this powerful \gls{gpu} the training of a 20 layer \gls{cnn} took about 60 minutes per epoch. Even smaller networks with 15 layers took about 72 seconds per iteration which adds up to 40 hours of training for a single network. 
+	\item \textbf{Dataset Size and Time}: This is also a problem with the training time. Deep neural networks need huge datasets but actually training these datasets increases the epoch duration even more which made it not feasible to utilize Food-101 for this thesis. One epoch of training a 15-layer \gls{cnn} with the full Food-101 dataset took almost 70 minutes.
+	\item \textbf{Dataset size}: Even with booth Food-101 datasets combined the number of images per class is still not sufficient enough to train huge neural nets from scratch. Recent publications all used \glspl{cnn} that were pretrained on ImageNet because ImageNet contains more than 140 times more images than Food-101.
+\end{enumerate}
+
+\section{Future Work}
+This thesis may form a corner stone for future food classification systems that extend the methods that were used for this work. There are many possible ways to expand the system and increase performance. 
+
+Convolutional neural networks play a very important role in image recognition and machine learning in general so it is only logical to further extend the use of neural networks. Due to the high computational cost and the restricted time frame very few tests on neuronal networks could be performed. Pretraining networks is a good method to leverage neuronal networks as feature extractors and refine them with actual food images. It would also be very interesting to test if those pretrained networks can be refined with a combination of the ETHZ Food-101 and the UEC Food-101 dataset. This would double the size of the original Food-101 dataset which could potentially lead to better results than the current benchmark from the Im2Calories team \cite{Meyers2015}. In addition, it would be very easy to take advantage of the increasing amount of online machine learning \glspl{api}\footnote{Microsoft recently released a free set of machine learning \glspl{api} which also include a computer vision \gls{api}. This \gls{api} can distinguish food and non-food items very well. \href{https://www.microsoft.com/cognitive-services/en-us/computer-vision-api}{https://www.microsoft.com/cognitive-services/en-us/computer-vision-api}} which could be used to filter non-food items from the Food-101 datasets.
+\newline\newline
+It may also be crucial to further investigate the impact of preprocessing techniques on classifier performance. In the course of this thesis histogram equalization, adaptive histogram equalization, \gls{zca} whitening, normalization and z-score normalization were implemented and added. It is very common to normalize data before neural net training but for the networks that were tested in this thesis, normalization did not improve performance. Due to the lack of time it was not possible to study the exact effects these preprocessing techniques have on classifiers.
+\newline\newline
+Another way to significantly improve classification performance is the use of multiple kernel learning, boosting and late fusion. The latter was implemented in this thesis in the form of a uniform majority voter, an early fusion classifier that combined multiple feature vectors which was discarded because of poor performance and a late fusion classifier that combined the output scores of \glspl{svm} to form a final decision. 
+\newline\newline
+In addition, new features should be evaluated. The performance of the histogram classifier especially in comparison with SIFT has shown that color is very important for food classification. Most of the edge feature classifiers work on grayscale images so it would be interesting to test if edge classifiers that combine color information and structure like C-SIFT actually improve performance. 
+\newline\newline
+Another field for improvement is the segmentation and size estimation algorithms. The proposed algorithm is only a proof of concept and was not the focus of this thesis. Therefore it would be valuable to refine this process with more advanced algorithms that can approximate depth information or even with 3D cameras which estimate volume.
